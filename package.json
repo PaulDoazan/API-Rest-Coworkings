@@ -1,0 +1,19 @@
+{
+  "name": "api-rest-coworkings",
+  "version": "1.0.0",
+  "description": "API Rest made with Express.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulDoazan/API-Rest-Coworkings.git"
+  },
+  "author": "Paul Doazan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaulDoazan/API-Rest-Coworkings/issues"
+  },
+  "homepage": "https://github.com/PaulDoazan/API-Rest-Coworkings#readme"
+}
