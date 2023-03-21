@@ -4,6 +4,11 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+app.use((req, res, next) => {
+    console.log(`URL : ${req.url}`)
+    next()
+})
+
 app.get('/', (req, res) => {
     res.send('Hello World !')
 })
@@ -14,8 +19,7 @@ app.get('/api/coworkings/:id', (req, res) => {
 });
 
 app.get('/api/coworkings', (req, res) => {
-    const coworkings = mockCoworkings;
-    res.send(`Il y a ${coworkings.length} coworkings dans la collection.`);
+    res.json(success("La liste des coworkings a bien été récupérée.", mockCoworkings));
 });
 
 
