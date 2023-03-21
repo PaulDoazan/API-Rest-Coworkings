@@ -1,4 +1,5 @@
 const mockCoworkings = require('./mock-coworkings')
+const { success } = require("./helper")
 const express = require('express')
 const app = express()
 const port = 3000
@@ -9,7 +10,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/coworkings/:id', (req, res) => {
     const coworking = mockCoworkings.find(el => el.id === parseInt(req.params.id))
-    res.json(coworking);
+    res.json(success("Un coworking a bien été trouvé.", coworking));
 });
 
 app.get('/api/coworkings', (req, res) => {
