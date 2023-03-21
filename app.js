@@ -8,9 +8,13 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/coworkings/:id', (req, res) => {
-    const coworkingId = req.params.id;
-    // Utiliser coworkingId pour récupérer les données correspondantes dans la base de données
-    res.send(`Vous avez demandé les informations pour le coworking nommé ${mockCoworkings[coworkingId].created}`);
+    const coworking = mockCoworkings.find(el => el.id === parseInt(req.params.id))
+    res.json(coworking);
+});
+
+app.get('/api/coworkings', (req, res) => {
+    const coworkings = mockCoworkings;
+    res.send(`Il y a ${coworkings.length} coworkings dans la collection.`);
 });
 
 
