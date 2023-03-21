@@ -1,6 +1,6 @@
 const mockCoworkings = require('./mock-coworkings')
 const morgan = require('morgan')
-const { success } = require("./helper")
+const { success, getUniqueId } = require("./helper")
 const express = require('express')
 const serveFavicon = require('serve-favicon')
 const app = express()
@@ -22,6 +22,14 @@ app.get('/api/coworkings/:id', (req, res) => {
 app.get('/api/coworkings', (req, res) => {
     res.json(success("La liste des coworkings a bien été récupérée.", mockCoworkings));
 });
+
+app.post('/api/coworkings', (req, res) => {
+    const id = getUniqueId(coworkings)
+    const coworkingCreated = { ...req.body, ...{ id: id, created: new Date() } }
+    coworkings.push(coworkingCreated)
+    const message = `Le coworking ${coworkingCreated.name} a bien été crée.`
+    res.json(success(message, coworkingCreated))
+})
 
 
 app.listen(port, () => {
