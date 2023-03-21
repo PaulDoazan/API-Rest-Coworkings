@@ -1,13 +1,11 @@
 const mockCoworkings = require('./mock-coworkings')
+const morgan = require('morgan')
 const { success } = require("./helper")
 const express = require('express')
 const app = express()
 const port = 3000
 
-app.use((req, res, next) => {
-    console.log(`URL : ${req.url}`)
-    next()
-})
+app.use(morgan('dev'))
 
 app.get('/', (req, res) => {
     res.send('Hello World !')
