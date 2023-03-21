@@ -2,10 +2,13 @@ const mockCoworkings = require('./mock-coworkings')
 const morgan = require('morgan')
 const { success } = require("./helper")
 const express = require('express')
+const serveFavicon = require('serve-favicon')
 const app = express()
 const port = 3000
 
-app.use(morgan('dev'))
+app
+    .use(serveFavicon(__dirname + '/favicon.ico'))
+    .use(morgan('dev'))
 
 app.get('/', (req, res) => {
     res.send('Hello World !')
