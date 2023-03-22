@@ -108,17 +108,7 @@ const coworkings = [
         superficy: 600,
         capacity: 50,
         created: new Date()
-    },
-    {
-        id: 21,
-        name: "Cohda",
-        price: { hour: 5, day: 20, month: 250 },
-        address: { number: "75ter", street: "boulevard Pierre 1er", postCode: 33110, city: "Le Bouscat" },
-        picture: "",
-        superficy: 100,
-        capacity: 12,
-        created: new Date()
-    },
+    }
 ];
 
 module.exports = coworkings
