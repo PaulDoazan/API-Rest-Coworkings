@@ -2,14 +2,16 @@ let mockCoworkings = require('./mock-coworkings')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const { success, getUniqueId } = require("./helper")
-const { Sequelize } = require('sequelize')
+const { Sequelize, DataTypes } = require('sequelize')
 const express = require('express')
 const serveFavicon = require('serve-favicon')
+const CoworkingModel = require('./src/models/coworking')
 const app = express()
 const port = 3000
 
+
 const sequelize = new Sequelize(
-    'coworking',
+    'bordeaux_coworking',
     'root',
     '',
     {
@@ -22,6 +24,10 @@ const sequelize = new Sequelize(
 sequelize.authenticate()
     .then(_ => console.log('La connexion à la base de données a bien été établie.'))
     .catch(error => console.error(`Impossible de se conneter à la base de données ${error}`))
+
+const Coworking = CoworkingModel(sequelize, DataTypes)
+sequelize.sync({ force: true })
+    .then(_ => console.log(`La base a bien été synchronisée.`))
 
 app
     .use(serveFavicon(__dirname + '/favicon.ico'))
