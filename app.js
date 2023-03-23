@@ -2,10 +2,26 @@ let mockCoworkings = require('./mock-coworkings')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const { success, getUniqueId } = require("./helper")
+const { Sequelize } = require('sequelize')
 const express = require('express')
 const serveFavicon = require('serve-favicon')
 const app = express()
 const port = 3000
+
+const sequelize = new Sequelize(
+    'coworking',
+    'root',
+    '',
+    {
+        host: 'localhost',
+        dialect: 'mariadb',
+        logging: false
+    }
+)
+
+sequelize.authenticate()
+    .then(_ => console.log('La connexion à la base de données a bien été établie.'))
+    .catch(error => console.error(`Impossible de se conneter à la base de données ${error}`))
 
 app
     .use(serveFavicon(__dirname + '/favicon.ico'))
