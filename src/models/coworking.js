@@ -20,6 +20,14 @@ module.exports = (sequelize, DataTypes) => {
         capacity: {
             type: DataTypes.INTEGER,
             allowNull: false
+        },
+        price: {
+            type: DataTypes.JSON,
+            allowNull: false
+        },
+        address: {
+            type: DataTypes.JSON,
+            allowNull: false
         }
     }, {
         timestamps: true,

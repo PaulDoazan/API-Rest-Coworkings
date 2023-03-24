@@ -9,7 +9,6 @@ const CoworkingModel = require('./src/models/coworking')
 const app = express()
 const port = 3000
 
-
 const sequelize = new Sequelize(
     'bordeaux_coworking',
     'root',
@@ -26,8 +25,21 @@ sequelize.authenticate()
     .catch(error => console.error(`Impossible de se conneter à la base de données ${error}`))
 
 const Coworking = CoworkingModel(sequelize, DataTypes)
+
 sequelize.sync({ force: true })
-    .then(_ => console.log(`La base a bien été synchronisée.`))
+    .then(_ => {
+        console.log(`La base a bien été synchronisée.`)
+        mockCoworkings.map(element => {
+            Coworking.create({
+                name: element.name,
+                price: element.price,
+                address: element.address,
+                picture: element.picture,
+                superficy: element.superficy,
+                capacity: element.capacity,
+            })
+        })
+    })
 
 app
     .use(serveFavicon(__dirname + '/favicon.ico'))
