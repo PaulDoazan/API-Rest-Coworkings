@@ -1,65 +1,33 @@
-let mockCoworkings = require('./mock-coworkings')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
-const { success, getUniqueId } = require("./helper")
-const { Sequelize, DataTypes } = require('sequelize')
 const express = require('express')
 const serveFavicon = require('serve-favicon')
-const CoworkingModel = require('./src/models/coworking')
+const sequelize = require('./src/db/sequelize')
+
 const app = express()
 const port = 3000
 
-const sequelize = new Sequelize(
-    'bordeaux_coworking',
-    'root',
-    '',
-    {
-        host: 'localhost',
-        dialect: 'mariadb',
-        logging: false
-    }
-)
-
-sequelize.authenticate()
-    .then(_ => console.log('La connexion à la base de données a bien été établie.'))
-    .catch(error => console.error(`Impossible de se conneter à la base de données ${error}`))
-
-const Coworking = CoworkingModel(sequelize, DataTypes)
-
-sequelize.sync({ force: true })
-    .then(_ => {
-        console.log(`La base a bien été synchronisée.`)
-        mockCoworkings.map(element => {
-            Coworking.create({
-                name: element.name,
-                price: element.price,
-                address: element.address,
-                picture: element.picture,
-                superficy: element.superficy,
-                capacity: element.capacity,
-            })
-        })
-    })
+sequelize.initDb();
 
 app
     .use(serveFavicon(__dirname + '/favicon.ico'))
     .use(morgan('dev'))
     .use(bodyParser.json())
 
+require('./src/routes/findAllCoworkings')(app)
+require('./src/routes/findCoworkingByPk')(app)
+require('./src/routes/createCoworking')(app)
+require('./src/routes/updateCoworking')(app)
+require('./src/routes/deleteCoworking')(app)
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+})
+
 app.get('/', (req, res) => {
     res.send('Hello World !')
 })
-
-app.get('/api/coworkings/:id', (req, res) => {
-    const coworking = mockCoworkings.find(el => el.id === parseInt(req.params.id))
-    const msg = coworking !== undefined ? "Un coworking a bien été trouvé." : "Aucun coworking trouvé."
-    res.json(success(msg, coworking));
-});
-
-app.get('/api/coworkings', (req, res) => {
-    res.json(success("La liste des coworkings a bien été récupérée.", mockCoworkings));
-});
-
+/*
 app.post('/api/coworkings', (req, res) => {
     const id = getUniqueId(mockCoworkings)
     // petit rappel sur le destructuring
@@ -93,8 +61,4 @@ app.delete('/api/coworkings/:id', (req, res) => {
 
     res.json(success(msg, mockCoworkings))
 })
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
-
+*/
