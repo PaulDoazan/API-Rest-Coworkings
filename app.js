@@ -19,6 +19,7 @@ require('./src/routes/findCoworkingByPk')(app)
 require('./src/routes/createCoworking')(app)
 require('./src/routes/updateCoworking')(app)
 require('./src/routes/deleteCoworking')(app)
+require('./src/routes/findCoworkingsRawQuery')(app)
 
 // 404 errors handler
 app.use((req, res) => {

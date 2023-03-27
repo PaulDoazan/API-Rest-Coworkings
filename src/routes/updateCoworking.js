@@ -25,6 +25,9 @@ module.exports = (app) => {
                 if (error instanceof ValidationError) {
                     return res.status(400).json({ message: error.message, data: error })
                 }
+                if (error instanceof UniqueConstraintError) {
+                    return res.status(400).json({ message: error.message, data: error })
+                }
                 const message = `Impossible de mettre à jour le coworking.`
                 res.status(500).json({ message, data: error })
             })

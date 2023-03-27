@@ -1,11 +1,17 @@
-const { Coworking } = require('../db/sequelize')
-const { Op } = require('sequelize');
+const { Coworking, sequelize } = require('../db/sequelize')
+const { QueryTypes } = require('sequelize');
 
 module.exports = (app) => {
-    app.get('/api/coworkings', (req, res) => {
+    app.get('/api/raw-coworkings', (req, res) => {
+        console.log(req.query.name);
         if (req.query.name) {
             const queryName = req.query.name;
-            return Coworking.findAll({ where: { name: { [Op.like]: `%${queryName}%` } } })
+            return sequelize.query('SELECT * FROM `coworkings` WHERE name LIKE :search_name',
+                {
+                    type: QueryTypes.SELECT,
+                    replacements: { search_name: `%${queryName}%` },
+                }
+            )
                 .then(coworkings => {
                     const message = `Il y a ${coworkings.length} comme résultat de la requête.`
                     res.json({ message, data: coworkings })

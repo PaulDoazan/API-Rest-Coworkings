@@ -37,5 +37,5 @@ const initDb = () => {
 }
 
 module.exports = {
-    initDb, Coworking
+    initDb, Coworking, sequelize
 }
