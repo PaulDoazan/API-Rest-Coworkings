@@ -1,8 +1,9 @@
 const { Coworking } = require('../db/sequelize')
 const { Op } = require('sequelize');
+const auth = require('../auth/auth')
 
 module.exports = (app) => {
-    app.get('/api/coworkings', (req, res) => {
+    app.get('/api/coworkings', auth, (req, res) => {
         const queryLimit = parseInt(req.query.limit) || 3;
         if (req.query.name) {
             if (req.query.name.length < 2) {
