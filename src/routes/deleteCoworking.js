@@ -1,7 +1,8 @@
 const { Coworking } = require('../db/sequelize')
+const auth = require('../auth/auth')
 
 module.exports = (app) => {
-    app.delete('/api/coworkings/:id', (req, res) => {
+    app.delete('/api/coworkings/:id', auth, (req, res) => {
         Coworking.findByPk(req.params.id)
             .then(coworking => {
                 if (coworking === null) {

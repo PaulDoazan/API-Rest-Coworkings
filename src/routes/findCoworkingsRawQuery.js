@@ -1,8 +1,9 @@
 const { Coworking, sequelize } = require('../db/sequelize')
-const { QueryTypes } = require('sequelize');
+const { QueryTypes } = require('sequelize')
+const auth = require('../auth/auth')
 
 module.exports = (app) => {
-    app.get('/api/raw-coworkings', (req, res) => {
+    app.get('/api/raw-coworkings', auth, (req, res) => {
         console.log(req.query.name);
         if (req.query.name) {
             const queryName = req.query.name;

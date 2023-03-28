@@ -1,5 +1,5 @@
 const { Coworking } = require('../db/sequelize')
-const { Op } = require('sequelize');
+const { Op } = require('sequelize')
 const auth = require('../auth/auth')
 
 module.exports = (app) => {

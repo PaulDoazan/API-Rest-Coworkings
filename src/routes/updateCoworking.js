@@ -1,8 +1,9 @@
 const { ValidationError } = require('sequelize')
 const { Coworking } = require('../db/sequelize')
+const auth = require('../auth/auth')
 
 module.exports = (app) => {
-    app.put('/api/coworkings/:id', (req, res) => {
+    app.put('/api/coworkings/:id', auth, (req, res) => {
         Coworking.update(req.body, {
             where: {
                 id: req.params.id

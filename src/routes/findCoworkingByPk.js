@@ -1,7 +1,8 @@
 const { Coworking } = require('../db/sequelize')
+const auth = require('../auth/auth')
 
 module.exports = (app) => {
-    app.get('/api/coworkings/:id', (req, res) => {
+    app.get('/api/coworkings/:id', auth, (req, res) => {
         const coworking = Coworking.findByPk(req.params.id)
             .then(coworking => {
                 if (coworking === null) {
