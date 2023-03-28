@@ -3,15 +3,16 @@ const { Op } = require('sequelize');
 
 module.exports = (app) => {
     app.get('/api/coworkings', (req, res) => {
+        const queryLimit = parseInt(req.query.limit) || 3;
         if (req.query.name) {
             const queryName = req.query.name;
-            return Coworking.findAll({ where: { name: { [Op.like]: `%${queryName}%` } } })
-                .then(coworkings => {
-                    const message = `Il y a ${coworkings.length} comme résultat de la requête.`
-                    res.json({ message, data: coworkings })
+            return Coworking.findAndCountAll({ where: { name: { [Op.like]: `%${queryName}%` } }, limit: queryLimit })
+                .then(({ count, rows }) => {
+                    const message = `Il y a ${count} résultat(s).`
+                    res.json({ message, data: rows })
                 })
         } else {
-            Coworking.findAll()
+            Coworking.findAll({ limit: queryLimit })
                 .then(coworkings => {
                     const msg = "La liste des coworkings a bien été récupérée."
                     res.json({ message: msg, data: coworkings });
