@@ -5,6 +5,10 @@ module.exports = (app) => {
     app.get('/api/coworkings', (req, res) => {
         const queryLimit = parseInt(req.query.limit) || 3;
         if (req.query.name) {
+            if (req.query.name.length < 2) {
+                const message = `Le terme de recherche doit contenir au minimum 2 caractères..`
+                return res.status(400).json({ message })
+            }
             const queryName = req.query.name;
             return Coworking.findAndCountAll({ where: { name: { [Op.like]: `%${queryName}%` } }, limit: queryLimit })
                 .then(({ count, rows }) => {

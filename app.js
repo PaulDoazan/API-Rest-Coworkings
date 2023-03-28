@@ -20,6 +20,7 @@ require('./src/routes/createCoworking')(app)
 require('./src/routes/updateCoworking')(app)
 require('./src/routes/deleteCoworking')(app)
 require('./src/routes/findCoworkingsRawQuery')(app)
+require('./src/routes/login')(app)
 
 // 404 errors handler
 app.use((req, res) => {

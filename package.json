@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/PaulDoazan/API-Rest-Coworkings#readme",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
     "mariadb": "^3.1.1",
     "sequelize": "^6.29.3",
     "serve-favicon": "^2.5.0"
