@@ -32,13 +32,21 @@ const initDb = () => {
                     address: element.address,
                     picture: element.picture,
                     superficy: element.superficy,
-                    capacity: element.capacity,
+                    capacity: element.capacity
                 })
             })
 
             bcrypt.hash('mdp', 10).then(hash => {
                 User.create({
                     username: 'pauld',
+                    password: hash,
+                    roles: ['user', 'admin']
+                })
+            })
+
+            bcrypt.hash('mdp', 10).then(hash => {
+                User.create({
+                    username: 'pierreb',
                     password: hash
                 })
             })

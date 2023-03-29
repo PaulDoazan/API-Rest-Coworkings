@@ -25,7 +25,8 @@ require('./src/routes/findCoworkingsRawQuery')(app)
 require('./src/routes/login')(app)
 
 app.get('/', (req, res) => {
-    res.send('Hello Coworkings !')
+    const message = 'Hello Coworkings !';
+    res.json({ message })
 })
 
 // 404 errors handler
