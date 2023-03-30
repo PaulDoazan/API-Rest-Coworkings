@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize')
 let mockCoworkings = require('./mock-coworkings')
 const CoworkingModel = require('../models/coworking')
 const UserModel = require('../models/user')
+const ReviewModel = require('../models/review')
 const bcrypt = require('bcrypt')
 
 const sequelize = new Sequelize(
@@ -21,12 +22,30 @@ sequelize.authenticate()
 
 const Coworking = CoworkingModel(sequelize, DataTypes)
 const User = UserModel(sequelize, DataTypes)
+const Review = ReviewModel(sequelize, DataTypes)
+
+// associations
+User.hasMany(Review, {
+    foreignKey: {
+        allowNull: false
+    }
+});
+Review.belongsTo(User)
+
+Coworking.hasMany(Review, {
+    foreignKey: {
+        allowNull: false
+    }
+});
+Review.belongsTo(Coworking)
+
 
 const initDb = () => {
+    let firstCoworking, firstUser
     return sequelize.sync({ force: true })
         .then(_ => {
-            mockCoworkings.map(element => {
-                Coworking.create({
+            mockCoworkings.map((element, index) => {
+                let coworking = Coworking.create({
                     name: element.name,
                     price: element.price,
                     address: element.address,
@@ -34,10 +53,11 @@ const initDb = () => {
                     superficy: element.superficy,
                     capacity: element.capacity
                 })
+                if (index === 0) firstCoworking = coworking
             })
 
             bcrypt.hash('mdp', 10).then(hash => {
-                User.create({
+                firstUser = User.create({
                     username: 'pauld',
                     password: hash,
                     roles: ['user', 'admin']
@@ -56,5 +76,5 @@ const initDb = () => {
 }
 
 module.exports = {
-    initDb, Coworking, sequelize, User
+    initDb, Coworking, sequelize, User, Review
 }

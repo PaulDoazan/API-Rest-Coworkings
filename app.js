@@ -17,10 +17,12 @@ app
 const coworkingRouter = require('./src/routes/coworkingRoutes');
 const coworkingRawSQLRouter = require('./src/routes/coworkingRawSQLRoutes');
 const userRouter = require('./src/routes/userRoutes');
+const reviewRouter = require('./src/routes/reviewRoutes');
 
 app.use('/api/coworkings', coworkingRouter)
 app.use('/api/raw-coworkings', coworkingRawSQLRouter)
 app.use('/api/users', userRouter)
+app.use('/api/reviews', reviewRouter)
 
 // 404 errors handler
 app.use((req, res) => {
