@@ -1,7 +1,7 @@
 const { User } = require('../db/sequelize')
 const { Op } = require('sequelize')
 
-module.exports = (req, res) => {
+exports.findAllUsers = (req, res) => {
     const queryLimit = parseInt(req.query.limit) || 3;
     if (req.query.name) {
         if (req.query.name.length < 2) {
@@ -25,4 +25,21 @@ module.exports = (req, res) => {
                 res.status(500).json({ message, data: error })
             })
     }
+}
+
+exports.findUserByPk = (req, res) => {
+    const user = User.findByPk(req.params.id)
+        .then(user => {
+            if (user === null) {
+                const message = `L'utilisateur demandé n'existe pas.`
+                res.status(404).json({ message })
+            } else {
+                const message = "Un utilisateur a bien été trouvé."
+                res.json({ message, data: user });
+            }
+        })
+        .catch(error => {
+            const message = `La liste des utilisateurs n'a pas pu se charger. Reessayez ulterieurement.`
+            res.status(500).json({ message, data: error })
+        })
 }

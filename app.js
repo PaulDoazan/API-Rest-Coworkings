@@ -6,8 +6,6 @@ const sequelize = require('./src/db/sequelize')
 const cors = require('cors')
 
 const app = express()
-const port = 3000
-
 sequelize.initDb();
 
 app
@@ -16,34 +14,17 @@ app
     .use(bodyParser.json())
     .use(cors())
 
-// const coworkingRouter = express.Router();
+const coworkingRouter = require('./src/routes/coworkingRoutes');
+const coworkingRawSQLRouter = require('./src/routes/coworkingRawSQLRoutes');
+const userRouter = require('./src/routes/userRoutes');
 
-app
-    .route('/api/coworkings')
-    .get(require('./src/routes/findAllCoworkings'))
-    .post(require('./src/routes/createCoworking'))
-
-app
-    .route('/api/coworkings/:id')
-    .get(require('./src/routes/findCoworkingByPk'))
-    .put(require('./src/routes/updateCoworking'))
-    .delete(require('./src/routes/deleteCoworking'))
-
-app
-    .route('/api/raw-coworkings')
-    .get(require('./src/routes/findCoworkingsRawQuery'))
+app.use('/api/coworkings', coworkingRouter)
+app.use('/api/raw-coworkings', coworkingRawSQLRouter)
+app.use('/api/user', userRouter)
 
 app
     .route('/api/login')
     .post(require('./src/routes/login'))
-
-app
-    .route('/api/users')
-    .get(require('./src/routes/findAllUsers'))
-
-app
-    .route('/api/users/:id')
-    .get(require('./src/routes/findUserByPk'))
 
 app.get('/', (req, res) => {
     const message = 'Hello Coworkings !';
@@ -55,6 +36,8 @@ app.use((req, res) => {
     const message = 'Impossible de trouver la ressource demandée ! Essayez une autre url.'
     res.status(404).json({ message })
 })
+
+const port = 3000
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

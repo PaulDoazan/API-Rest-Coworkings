@@ -1,7 +1,7 @@
 const { Coworking, sequelize } = require('../db/sequelize')
 const { QueryTypes } = require('sequelize')
 
-module.exports = (req, res) => {
+exports.findAllCoworkings = (req, res) => {
     if (req.query.name) {
         const queryName = req.query.name;
         return sequelize.query('SELECT * FROM `coworkings` WHERE name LIKE :search_name',
@@ -11,13 +11,13 @@ module.exports = (req, res) => {
             }
         )
             .then(coworkings => {
-                const message = `Il y a ${coworkings.length} comme résultat de la requête.`
+                const message = `Il y a ${coworkings.length} comme résultat de la requête en SQL pur.`
                 res.json({ message, data: coworkings })
             })
     } else {
         Coworking.findAll()
             .then(coworkings => {
-                const msg = "La liste des coworkings a bien été récupérée."
+                const msg = "La liste des coworkings a bien été récupérée en SQL pur."
                 res.json({ message: msg, data: coworkings });
             })
             .catch(error => {
