@@ -20,7 +20,7 @@ const userRouter = require('./src/routes/userRoutes');
 
 app.use('/api/coworkings', coworkingRouter)
 app.use('/api/raw-coworkings', coworkingRawSQLRouter)
-app.use('/api/user', userRouter)
+app.use('/api/users', userRouter)
 
 app
     .route('/api/login')
@@ -37,9 +37,4 @@ app.use((req, res) => {
     res.status(404).json({ message })
 })
 
-const port = 3000
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
-
+module.exports = app;

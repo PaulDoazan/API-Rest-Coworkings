@@ -3,11 +3,11 @@ const router = express.Router();
 const userController = require('../controllers/userController')
 
 router
-    .route('/api/users')
+    .route('/')
     .get(userController.findAllUsers)
 
 router
-    .route('/api/users/:id')
+    .route('/:id')
     .get(userController.findUserByPk)
 
 module.exports = router;
