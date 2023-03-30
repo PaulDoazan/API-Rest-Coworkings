@@ -10,13 +10,13 @@ exports.findAllUsers = (req, res) => {
             return res.status(400).json({ message })
         }
         const queryName = req.query.name;
-        return User.findAndCountAll({ where: { name: { [Op.like]: `%${queryName}%` } }, limit: queryLimit })
+        return User.scope('withoutPassword').findAndCountAll({ where: { name: { [Op.like]: `%${queryName}%` } }, limit: queryLimit })
             .then(({ count, rows }) => {
                 const message = `Il y a ${count} résultat(s).`
                 res.json({ message, data: rows })
             })
     } else {
-        User.findAll({ limit: queryLimit })
+        User.scope('withoutPassword').findAll({ limit: queryLimit })
             .then(users => {
                 const msg = "La liste des utilisateurs a bien été récupérée."
                 res.json({ message: msg, data: users });
@@ -29,7 +29,7 @@ exports.findAllUsers = (req, res) => {
 }
 
 exports.findUserByPk = (req, res) => {
-    const user = User.findByPk(req.params.id)
+    const user = User.scope('withoutPassword').findByPk(req.params.id)
         .then(user => {
             if (user === null) {
                 const message = `L'utilisateur demandé n'existe pas.`

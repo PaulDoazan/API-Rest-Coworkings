@@ -22,10 +22,6 @@ app.use('/api/coworkings', coworkingRouter)
 app.use('/api/raw-coworkings', coworkingRawSQLRouter)
 app.use('/api/users', userRouter)
 
-app
-    .route('/api/login')
-    .post(require('./src/routes/login'))
-
 // 404 errors handler
 app.use((req, res) => {
     const message = 'Impossible de trouver la ressource demandée ! Essayez une autre url.'

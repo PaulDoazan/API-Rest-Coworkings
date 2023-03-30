@@ -38,5 +38,19 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         }
+    }, {
+        scopes: {
+            withoutPassword: {
+                attributes: { exclude: ['password'] },
+            }
+        },
+        hooks: {
+            afterCreate: (record) => {
+                delete record.dataValues.password;
+            },
+            afterUpdate: (record) => {
+                delete record.dataValues.password;
+            },
+        }
     })
 }

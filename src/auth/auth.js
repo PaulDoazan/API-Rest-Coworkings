@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
-const privateKey = require('../auth/private_key')
+const privateKey = require('../auth/private_key');
+const { User } = require('../db/sequelize')
 
-const verifyToken = (req, res, next) => {
+exports.protect = (req, res, next) => {
     const authorizationHeader = req.headers.authorization;
 
     if (!authorizationHeader) {
@@ -11,7 +12,7 @@ const verifyToken = (req, res, next) => {
     try {
         const token = authorizationHeader.split(' ')[1]
         const decoded = jwt.verify(token, privateKey);
-        req.user = decoded;
+        req.userId = decoded.data;
     } catch (err) {
         const message = "Jeton invalide"
         return res.status(401).json({ message });
@@ -19,4 +20,15 @@ const verifyToken = (req, res, next) => {
     return next();
 };
 
-module.exports = verifyToken;
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        User.findByPk(req.userId).then(user => {
+            console.log(req.userId, user.username, user.roles, roles)
+            if (!user || !roles.every(r => user.roles.includes(r))) {
+                const message = "Droits insuffisants"
+                return res.status(403).json({ message });
+            }
+            return next();
+        })
+    }
+}
