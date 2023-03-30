@@ -37,6 +37,14 @@ app
     .route('/api/login')
     .post(require('./src/routes/login'))
 
+app
+    .route('/api/users')
+    .get(require('./src/routes/findAllUsers'))
+
+app
+    .route('/api/users/:id')
+    .get(require('./src/routes/findUserByPk'))
+
 app.get('/', (req, res) => {
     const message = 'Hello Coworkings !';
     res.json({ message })
