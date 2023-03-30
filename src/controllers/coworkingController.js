@@ -1,3 +1,4 @@
+const { ValidationError, UniqueConstraintError } = require('sequelize')
 const { Coworking } = require('../db/sequelize')
 const { Op } = require('sequelize')
 

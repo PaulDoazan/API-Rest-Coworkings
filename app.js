@@ -26,11 +26,6 @@ app
     .route('/api/login')
     .post(require('./src/routes/login'))
 
-app.get('/', (req, res) => {
-    const message = 'Hello Coworkings !';
-    res.json({ message })
-})
-
 // 404 errors handler
 app.use((req, res) => {
     const message = 'Impossible de trouver la ressource demandée ! Essayez une autre url.'

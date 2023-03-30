@@ -1,3 +1,4 @@
+const { ValidationError, UniqueConstraintError } = require('sequelize')
 const { User } = require('../db/sequelize')
 const { Op } = require('sequelize')
 
