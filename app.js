@@ -16,13 +16,26 @@ app
     .use(bodyParser.json())
     .use(cors())
 
-require('./src/routes/findAllCoworkings')(app)
-require('./src/routes/findCoworkingByPk')(app)
-require('./src/routes/createCoworking')(app)
-require('./src/routes/updateCoworking')(app)
-require('./src/routes/deleteCoworking')(app)
-require('./src/routes/findCoworkingsRawQuery')(app)
-require('./src/routes/login')(app)
+// const coworkingRouter = express.Router();
+
+app
+    .route('/api/coworkings')
+    .get(require('./src/routes/findAllCoworkings'))
+    .post(require('./src/routes/createCoworking'))
+
+app
+    .route('/api/coworkings/:id')
+    .get(require('./src/routes/findCoworkingByPk'))
+    .put(require('./src/routes/updateCoworking'))
+    .delete(require('./src/routes/deleteCoworking'))
+
+app
+    .route('/api/raw-coworkings')
+    .get(require('./src/routes/findCoworkingsRawQuery'))
+
+app
+    .route('/api/login')
+    .post(require('./src/routes/login'))
 
 app.get('/', (req, res) => {
     const message = 'Hello Coworkings !';
