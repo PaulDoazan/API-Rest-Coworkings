@@ -9,6 +9,10 @@ router
     .post(authController.protect, authController.restrictTo('admin'), coworkingController.createCoworking)
 
 router
+    .route(['/withReview', '/withReview/:minRate'])
+    .get(coworkingController.findAllCoworkingsByReview)
+
+router
     .route('/:id')
     .get(coworkingController.findCoworkingByPk)
     .put(authController.protect, authController.restrictTo('admin'), coworkingController.updateCoworking)

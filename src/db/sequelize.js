@@ -41,11 +41,10 @@ Review.belongsTo(Coworking)
 
 
 const initDb = () => {
-    let firstCoworking, firstUser
     return sequelize.sync({ force: true })
         .then(_ => {
             mockCoworkings.map((element, index) => {
-                let coworking = Coworking.create({
+                Coworking.create({
                     name: element.name,
                     price: element.price,
                     address: element.address,
@@ -53,14 +52,27 @@ const initDb = () => {
                     superficy: element.superficy,
                     capacity: element.capacity
                 })
-                if (index === 0) firstCoworking = coworking
             })
 
             bcrypt.hash('mdp', 10).then(hash => {
-                firstUser = User.create({
+                User.create({
                     username: 'pauld',
                     password: hash,
                     roles: ['user', 'admin']
+                }).then(_ => {
+                    Review.create({
+                        content: 'First review',
+                        rating: 4,
+                        UserId: 1,
+                        CoworkingId: 3
+                    })
+
+                    Review.create({
+                        content: 'Second review',
+                        rating: 5,
+                        UserId: 1,
+                        CoworkingId: 3
+                    })
                 })
             })
 

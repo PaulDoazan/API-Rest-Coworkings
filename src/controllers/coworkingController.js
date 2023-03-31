@@ -16,7 +16,7 @@ exports.findAllCoworkings = (req, res) => {
                 res.json({ message, data: rows })
             })
     } else {
-        Coworking.findAll({ limit: queryLimit, include: Review })
+        Coworking.findAll({ limit: queryLimit })
             .then(coworkings => {
                 const msg = "La liste des coworkings a bien été récupérée."
                 res.json({ message: msg, data: coworkings });
@@ -109,6 +109,39 @@ exports.updateCoworking = (req, res) => {
             }
 
             const message = `Impossible de mettre à jour le coworking.`
+            res.status(500).json({ message, data: error })
+        })
+}
+
+//made with SQL
+exports.findAllCoworkingsByReview = (req, res) => {
+    const minRate = req.params.minRate || 4
+    Coworking.findAll({
+        include: {
+            model: Review,
+            where: {
+                rating: { [Op.gte]: minRate }
+            }
+        }
+    })
+        .then(coworkings => {
+            const msg = "La liste des coworkings a bien été récupérée."
+            res.json({ message: msg, data: coworkings });
+        })
+        .catch(error => {
+            const message = `La liste des coworkings n'a pas pu se charger. Reessayez ulterieurement.`
+            res.status(500).json({ message, data: error })
+        })
+}
+
+exports.findAllCoworkingsByReviewSQL = (req, res) => {
+    Coworking.findAll({ include: Review })
+        .then(coworkings => {
+            const msg = "La liste des coworkings a bien été récupérée."
+            res.json({ message: msg, data: coworkings });
+        })
+        .catch(error => {
+            const message = `La liste des coworkings n'a pas pu se charger. Reessayez ulterieurement.`
             res.status(500).json({ message, data: error })
         })
 }
