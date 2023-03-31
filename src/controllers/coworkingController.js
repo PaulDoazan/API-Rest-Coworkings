@@ -1,6 +1,5 @@
-const { ValidationError, UniqueConstraintError } = require('sequelize')
-const { Coworking, Review } = require('../db/sequelize')
-const { Op } = require('sequelize')
+const { ValidationError, UniqueConstraintError, QueryTypes, Op } = require('sequelize')
+const { Coworking, Review, sequelize } = require('../db/sequelize')
 
 exports.findAllCoworkings = (req, res) => {
     const queryLimit = parseInt(req.query.limit) || 3;
@@ -135,10 +134,16 @@ exports.findAllCoworkingsByReview = (req, res) => {
 }
 
 exports.findAllCoworkingsByReviewSQL = (req, res) => {
-    Coworking.findAll({ include: Review })
+    const minRate = req.params.minRate || 4
+    return sequelize.query('SELECT name, rating FROM `coworkings` INNER JOIN `reviews` ON `coworkings`.`id` = `reviews`.`coworkingId`',
+        {
+            type: QueryTypes.SELECT,
+            replacements: { min_rate: `%${minRate}%` },
+        }
+    )
         .then(coworkings => {
-            const msg = "La liste des coworkings a bien été récupérée."
-            res.json({ message: msg, data: coworkings });
+            const message = `Il y a ${coworkings.length} coworkings comme résultat de la requête en SQL pur.`
+            res.json({ message, data: coworkings })
         })
         .catch(error => {
             const message = `La liste des coworkings n'a pas pu se charger. Reessayez ulterieurement.`

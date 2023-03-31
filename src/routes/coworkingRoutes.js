@@ -10,7 +10,7 @@ router
 
 router
     .route(['/withReview', '/withReview/:minRate'])
-    .get(coworkingController.findAllCoworkingsByReview)
+    .get(coworkingController.findAllCoworkingsByReviewSQL)
 
 router
     .route('/:id')
