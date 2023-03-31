@@ -10,13 +10,13 @@ exports.findAllReviews = (req, res) => {
             return res.status(400).json({ message })
         }
         const queryName = req.query.name;
-        return Review.findAndCountAll({ where: { name: { [Op.like]: `%${queryName}%` } }, limit: queryLimit })
+        return Review.findAndCountAll({ where: { name: { [Op.like]: `%${queryName}%` } }, limit: queryLimit, include: User })
             .then(({ count, rows }) => {
                 const message = `Il y a ${count} résultat(s).`
                 res.json({ message, data: rows })
             })
     } else {
-        Review.findAll({ limit: queryLimit })
+        Review.findAll({ include: User.scope('withoutPassword') })
             .then(reviews => {
                 const msg = "La liste des avis a bien été récupérée."
                 res.json({ message: msg, data: reviews });

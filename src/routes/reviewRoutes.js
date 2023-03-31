@@ -6,13 +6,11 @@ const authController = require('../controllers/authController')
 router
     .route('/')
     .get(reviewController.findAllReviews)
+    .post(authController.protect, authController.restrictTo('admin'), reviewController.createReview)
 
 router
     .route('/:id')
     .get(reviewController.findReviewByPk)
 
-router
-    .route('/')
-    .post(reviewController.createReview)
 
 module.exports = router;
