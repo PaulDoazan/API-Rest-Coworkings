@@ -1,5 +1,5 @@
 const { ValidationError, UniqueConstraintError } = require('sequelize')
-const { Coworking } = require('../db/sequelize')
+const { Coworking, Review } = require('../db/sequelize')
 const { Op } = require('sequelize')
 
 exports.findAllCoworkings = (req, res) => {
@@ -16,7 +16,7 @@ exports.findAllCoworkings = (req, res) => {
                 res.json({ message, data: rows })
             })
     } else {
-        Coworking.findAll({ limit: queryLimit })
+        Coworking.findAll({ limit: queryLimit, include: Review })
             .then(coworkings => {
                 const msg = "La liste des coworkings a bien été récupérée."
                 res.json({ message: msg, data: coworkings });
@@ -52,10 +52,7 @@ exports.createCoworking = (req, res) => {
             res.json({ message, data: coworkingCreated })
         })
         .catch(error => {
-            if (error instanceof ValidationError) {
-                return res.status(400).json({ message: error.message, data: error })
-            }
-            if (error instanceof UniqueConstraintError) {
+            if (error instanceof ValidationError || error instanceof UniqueConstraintError) {
                 return res.status(400).json({ message: error.message, data: error })
             }
 
@@ -107,14 +104,11 @@ exports.updateCoworking = (req, res) => {
                 })
         })
         .catch(error => {
-            if (error instanceof ValidationError) {
+            if (error instanceof ValidationError || error instanceof UniqueConstraintError) {
                 return res.status(400).json({ message: error.message, data: error })
             }
-            if (error instanceof UniqueConstraintError) {
-                return res.status(400).json({ message: error.message, data: error })
-            }
+
             const message = `Impossible de mettre à jour le coworking.`
             res.status(500).json({ message, data: error })
         })
-
 }

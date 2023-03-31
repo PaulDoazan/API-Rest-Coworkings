@@ -5,7 +5,7 @@ const authController = require('../controllers/authController')
 
 router
     .route('/')
-    .get(authController.protect, coworkingController.findAllCoworkings)
+    .get(coworkingController.findAllCoworkings)
     .post(authController.protect, authController.restrictTo('admin'), coworkingController.createCoworking)
 
 router

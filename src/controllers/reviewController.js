@@ -16,7 +16,7 @@ exports.findAllReviews = (req, res) => {
                 res.json({ message, data: rows })
             })
     } else {
-        Review.findAll({ include: User.scope('withoutPassword') })
+        Review.findAll({ include: [User.scope('withoutPassword'), Coworking] })
             .then(reviews => {
                 const msg = "La liste des avis a bien été récupérée."
                 res.json({ message: msg, data: reviews });
@@ -29,7 +29,7 @@ exports.findAllReviews = (req, res) => {
 }
 
 exports.findReviewByPk = (req, res) => {
-    Review.findByPk(req.params.id)
+    Review.findByPk(req.params.id, { include: [User.scope('withoutPassword'), Coworking] })
         .then(review => {
             if (review === null) {
                 const message = `L'avis demandé n'existe pas.`
@@ -53,18 +53,38 @@ exports.createReview = (req, res) => {
         CoworkingId: 1
     })
         .then(reviewCreated => {
-            const message = `L'avis ${reviewCreated.content} a bien été créé.`
+            const message = `L'avis n°${reviewCreated.id} a bien été créé.`
             res.json({ message, data: reviewCreated })
         })
         .catch(error => {
-            if (error instanceof ValidationError) {
-                return res.status(400).json({ message: error.message, data: error })
-            }
-            if (error instanceof UniqueConstraintError) {
+            if (error instanceof ValidationError || error instanceof UniqueConstraintError) {
                 return res.status(400).json({ message: error.message, data: error })
             }
 
-            const message = `L'avis' n'a pas pu être créé. Reessayez ulterieurement.`
+            const message = `L'avis n'a pas pu être créé. Reessayez ulterieurement.`
+            res.status(500).json({ message, data: error })
+        })
+}
+
+exports.deleteReview = (req, res) => {
+    Review.findByPk(req.params.id)
+        .then(review => {
+            if (review === null) {
+                const message = `L'avis demandé n'existe pas.`
+                return res.status(404).json({ message })
+            }
+            return Coworking.destroy({
+                where: {
+                    id: req.params.id
+                }
+            })
+                .then(_ => {
+                    const message = `L'avis n°${review.id} a bien été supprimé.`
+                    res.json({ message, data: review });
+                })
+        })
+        .catch(error => {
+            const message = `Impossible de supprimer le coworking.`
             res.status(500).json({ message, data: error })
         })
 }
