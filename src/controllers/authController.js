@@ -24,7 +24,7 @@ exports.signup = (req, res) => {
         .then(userCreated => {
             const token = signToken(userCreated.id)
             const message = `Le coworking ${userCreated.username} a bien été créé.`
-            res.json({ message, data: userCreated, token })
+            res.json({ message, user: userCreated, token })
         })
         .catch(error => {
             if (error instanceof ValidationError || error instanceof UniqueConstraintError) {
@@ -57,7 +57,8 @@ exports.login = (req, res) => {
             const token = signToken(user.id)
 
             const message = `L'utilisateur a été connecté avec succès`;
-            return res.json({ message, token })
+            user.password = ''
+            return res.json({ message, user, token })
         })
     }).catch(error => {
         const message = "L'utilisateur n'a pas pu être connecté. Réessayez ultérieurement."
