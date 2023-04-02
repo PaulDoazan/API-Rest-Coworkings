@@ -23,7 +23,7 @@ exports.signup = (req, res) => {
     })
         .then(userCreated => {
             const token = signToken(userCreated.id)
-            const message = `Le coworking ${userCreated.username} a bien été créé.`
+            const message = `L'utilisateur ${userCreated.username} a bien été créé.`
             res.json({ message, user: userCreated, token })
         })
         .catch(error => {
@@ -31,7 +31,7 @@ exports.signup = (req, res) => {
                 return res.status(400).json({ message: error.message })
             }
 
-            const message = `Le coworking n'a pas pu être créé. Reessayez ulterieurement.`
+            const message = `L'utilisateur n'a pas pu être créé. Reessayez ulterieurement.`
             res.status(500).json({ message })
         })
 }

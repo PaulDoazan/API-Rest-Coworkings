@@ -18,5 +18,6 @@ router
 router
     .route('/:id')
     .get(userController.findUserByPk)
+    .put(authController.protect, authController.restrictTo('admin'), userController.updateUser)
 
 module.exports = router;
