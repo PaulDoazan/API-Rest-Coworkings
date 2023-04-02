@@ -46,7 +46,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         address: {
             type: DataTypes.JSON,
-            allowNull: false
         },
         isOpen: {
             type: DataTypes.BOOLEAN,

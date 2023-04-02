@@ -2,7 +2,7 @@ const { ValidationError, UniqueConstraintError, QueryTypes, Op } = require('sequ
 const { Coworking, Review, sequelize } = require('../db/sequelize')
 
 exports.findAllCoworkings = (req, res) => {
-    const queryLimit = parseInt(req.query.limit) || 3;
+    const queryLimit = parseInt(req.query.limit) || 20;
     if (req.query.name) {
         if (req.query.name.length < 2) {
             const message = `Le terme de recherche doit contenir au minimum 2 caractères..`
@@ -18,7 +18,7 @@ exports.findAllCoworkings = (req, res) => {
         Coworking.findAll({ limit: queryLimit })
             .then(coworkings => {
                 const msg = "La liste des coworkings a bien été récupérée."
-                res.json({ message: msg, data: coworkings });
+                res.json({ message: msg, coworkings });
             })
             .catch(error => {
                 const message = `La liste des coworkings n'a pas pu se charger. Reessayez ulterieurement.`
