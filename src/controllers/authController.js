@@ -69,6 +69,8 @@ exports.login = (req, res) => {
 exports.protect = (req, res, next) => {
     const authorizationHeader = req.headers.authorization;
 
+    console.log(req.headers)
+
     if (!authorizationHeader) {
         const message = "Un jeton est nécessaire pour l'authentification"
         return res.status(403).json({ message });
