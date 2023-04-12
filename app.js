@@ -1,4 +1,4 @@
-const morgan = require('morgan')
+// const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const express = require('express')
 const serveFavicon = require('serve-favicon')
@@ -11,7 +11,7 @@ sequelize.initDb();
 app
     .use(serveFavicon(__dirname + '/favicon.ico'))
     // .use(morgan('dev'))
-    .use(bodyParser.json())
+    .use(express.json())
     .use(cors())
 
 const coworkingRouter = require('./src/routes/coworkingRoutes');
