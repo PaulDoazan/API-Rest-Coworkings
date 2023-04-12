@@ -18,7 +18,7 @@ const sequelize = new Sequelize(
 
 sequelize.authenticate()
     .then(_ => console.log('La connexion à la base de données a bien été établie.'))
-    .catch(error => console.error(`Impossible de se conneter à la base de données ${error}`))
+    .catch(error => console.error(`Impossible de se connecter à la base de données ${error}`))
 
 const Coworking = CoworkingModel(sequelize, DataTypes)
 const User = UserModel(sequelize, DataTypes)
