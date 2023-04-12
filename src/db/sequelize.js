@@ -5,16 +5,31 @@ const UserModel = require('../models/user')
 const ReviewModel = require('../models/review')
 const bcrypt = require('bcrypt')
 
-const sequelize = new Sequelize(
-    'bordeaux_coworking',
-    'root',
-    '',
-    {
-        host: 'localhost',
-        dialect: 'mariadb',
-        logging: false
-    }
-)
+let sequelize;
+
+if(process.env.NODE_ENV === 'production'){
+    sequelize = new Sequelize(
+        'shsiag7h4fjvtwrk',
+        'rmhaa31ssy830jv5',
+        'i4c5k9mkj39013gf',
+        {
+            host: 'q0h7yf5pynynaq54.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+            dialect: 'mariadb',
+            logging: false
+        }
+    )
+} else {
+    sequelize = new Sequelize(
+        'bordeaux_coworking',
+        'root',
+        '',
+        {
+            host: 'localhost',
+            dialect: 'mariadb',
+            logging: false
+        }
+    )
+}
 
 sequelize.authenticate()
     .then(_ => console.log('La connexion à la base de données a bien été établie.'))
@@ -41,7 +56,7 @@ Review.belongsTo(Coworking)
 
 
 const initDb = () => {
-    return sequelize.sync({ force: true })
+    return sequelize.sync()
         .then(_ => {
             mockCoworkings.map((element, index) => {
                 Coworking.create({
