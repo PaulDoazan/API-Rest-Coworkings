@@ -2,11 +2,11 @@
 const bodyParser = require('body-parser')
 const express = require('express')
 const serveFavicon = require('serve-favicon')
-// const sequelize = require('./src/db/sequelize')
+const sequelize = require('./src/db/sequelize')
 const cors = require('cors')
 
 const app = express()
-// sequelize.initDb();
+sequelize.initDb();
 
 app
     .use(serveFavicon(__dirname + '/favicon.ico'))
