@@ -47,10 +47,10 @@ exports.findReviewByPk = (req, res) => {
 
 exports.createReview = (req, res) => {
     Review.create({
-        content: "Great place",
-        rating: 4,
-        UserId: 1,
-        CoworkingId: 1
+        content: req.body.content,
+        rating: req.body.rating,
+        UserId: req.userId,
+        CoworkingId: req.body.coworkingId
     })
         .then(reviewCreated => {
             const message = `L'avis n°${reviewCreated.id} a bien été créé.`
@@ -85,6 +85,35 @@ exports.deleteReview = (req, res) => {
         })
         .catch(error => {
             const message = `Impossible de supprimer le coworking.`
+            res.status(500).json({ message, data: error })
+        })
+}
+
+exports.updateReview = (req, res) => {
+    Review.update(req.body, {
+        where: {
+            id: req.params.id
+        }
+    })
+        .then(_ => {
+            // retourner la valeur d'une promesse permet de transmettre une erreur le cas échéant, rappel nécessaire
+            return Review.findByPk(req.params.id)
+                .then(review => {
+                    if (review === null) {
+                        const message = `Le commentaire demandé n'existe pas.`
+                        res.status(404).json({ message })
+                    } else {
+                        const message = `Le commentaire n°${review.id} a bien été modifié.`
+                        res.json({ message, data: review });
+                    }
+                })
+        })
+        .catch(error => {
+            if (error instanceof ValidationError || error instanceof UniqueConstraintError) {
+                return res.status(400).json({ message: error.message, data: error })
+            }
+
+            const message = `Impossible de mettre à jour le commentaire.`
             res.status(500).json({ message, data: error })
         })
 }

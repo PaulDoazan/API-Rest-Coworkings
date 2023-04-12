@@ -1,5 +1,5 @@
 const { ValidationError, UniqueConstraintError } = require('sequelize')
-const { User } = require('../db/sequelize')
+const { User, Review } = require('../db/sequelize')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const privateKey = require('../auth/private_key')
@@ -81,7 +81,7 @@ exports.protect = (req, res, next) => {
         req.userId = decoded.data;
     } catch (err) {
         const message = "Jeton invalide"
-        return res.status(401).json({ message });
+        return res.status(401).json({ message, data: err });
     }
     return next();
 };
@@ -96,5 +96,23 @@ exports.restrictTo = (...roles) => {
             }
             return next();
         })
+    }
+}
+
+exports.restrictToOwnUser = () => {
+    return (req, res, next) => {
+        User.findByPk(req.userId).then(user => {
+            console.log(req.userId)
+            return Review.findByPk(req.params.id).then(review => {
+                if (review.id !== user.id) {
+                    const message = "Vous n'êtes pas l'auteur de ce commentaire."
+                    return res.status(403).json({ message });
+                }
+                return next();
+            })
+            
+        }).catch(err => {
+            return res.status(500).json({message: err.message, data: err})
+        }) 
     }
 }

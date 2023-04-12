@@ -6,12 +6,15 @@ const authController = require('../controllers/authController')
 router
     .route('/')
     .get(coworkingController.findAllCoworkings)
-    .post(authController.protect, authController.restrictTo('admin'), coworkingController.createCoworking)
-    // .post(coworkingController.createCoworking) 
 
 router
-    .route(['/withReview', '/withReview/:minRate'])
-    .get(coworkingController.findAllCoworkingsByReviewSQL)
+    .route('/withReview')
+    .get(coworkingController.findAllCoworkingsByReview)
+    .post(authController.protect, authController.restrictTo('admin'), coworkingController.createCoworking)
+
+// router
+//     .route(['/withReview', '/withReview/:minRate'])
+//     .get(coworkingController.findAllCoworkingsByReviewSQL)
 
 router
     .route('/:id')

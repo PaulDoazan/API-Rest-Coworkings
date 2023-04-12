@@ -112,7 +112,6 @@ exports.updateCoworking = (req, res) => {
         })
 }
 
-//made with SQL
 exports.findAllCoworkingsByReview = (req, res) => {
     const minRate = req.params.minRate || 4
     Coworking.findAll({
@@ -125,7 +124,7 @@ exports.findAllCoworkingsByReview = (req, res) => {
     })
         .then(coworkings => {
             const msg = "La liste des coworkings a bien été récupérée."
-            res.json({ message: msg, data: coworkings });
+            res.json({ message: msg, coworkings });
         })
         .catch(error => {
             const message = `La liste des coworkings n'a pas pu se charger. Reessayez ulterieurement.`
