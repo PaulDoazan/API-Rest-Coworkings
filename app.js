@@ -10,7 +10,7 @@ sequelize.initDb();
 
 app
     .use(serveFavicon(__dirname + '/favicon.ico'))
-    .use(morgan('dev'))
+    // .use(morgan('dev'))
     .use(bodyParser.json())
     .use(cors())
 
